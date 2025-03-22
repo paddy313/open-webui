@@ -362,6 +362,9 @@ async def get_rag_config(request: Request, user=Depends(get_admin_user)):
                 "endpoint": request.app.state.config.DOCUMENT_INTELLIGENCE_ENDPOINT,
                 "key": request.app.state.config.DOCUMENT_INTELLIGENCE_KEY,
             },
+            "mistral_ocr_config": {
+                "api_key": request.app.state.config.MISTRAL_OCR_API_KEY,
+            },
         },
         "chunk": {
             "text_splitter": request.app.state.config.TEXT_SPLITTER,
@@ -425,10 +428,15 @@ class DocumentIntelligenceConfigForm(BaseModel):
     key: str
 
 
+class MistralOCRConfigForm(BaseModel):
+    api_key: str
+
+
 class ContentExtractionConfig(BaseModel):
     engine: str = ""
     tika_server_url: Optional[str] = None
     document_intelligence_config: Optional[DocumentIntelligenceConfigForm] = None
+    mistral_ocr_config: Optional[MistralOCRConfigForm] = None
 
 
 class ChunkParamUpdateForm(BaseModel):
@@ -547,6 +555,10 @@ async def update_rag_config(
             request.app.state.config.DOCUMENT_INTELLIGENCE_KEY = (
                 form_data.content_extraction.document_intelligence_config.key
             )
+        if form_data.content_extraction.mistral_ocr_config is not None:
+            request.app.state.config.MISTRAL_OCR_API_KEY = (
+                form_data.content_extraction.mistral_ocr_config.api_key
+            )
 
     if form_data.chunk is not None:
         request.app.state.config.TEXT_SPLITTER = form_data.chunk.text_splitter
@@ -651,6 +663,9 @@ async def update_rag_config(
             "document_intelligence_config": {
                 "endpoint": request.app.state.config.DOCUMENT_INTELLIGENCE_ENDPOINT,
                 "key": request.app.state.config.DOCUMENT_INTELLIGENCE_KEY,
+            },
+            "mistral_ocr_config": {
+                "api_key": request.app.state.config.MISTRAL_OCR_API_KEY,
             },
         },
         "chunk": {
@@ -993,6 +1008,7 @@ def process_file(
                     PDF_EXTRACT_IMAGES=request.app.state.config.PDF_EXTRACT_IMAGES,
                     DOCUMENT_INTELLIGENCE_ENDPOINT=request.app.state.config.DOCUMENT_INTELLIGENCE_ENDPOINT,
                     DOCUMENT_INTELLIGENCE_KEY=request.app.state.config.DOCUMENT_INTELLIGENCE_KEY,
+                    MISTRAL_OCR_API_KEY=request.app.state.config.MISTRAL_OCR_API_KEY,
                 )
                 docs = loader.load(
                     file.filename, file.meta.get("content_type"), file_path

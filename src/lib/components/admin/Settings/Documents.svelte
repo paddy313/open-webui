@@ -745,11 +745,64 @@
 								/>
 							</div>
 						{:else if RAGConfig.CONTENT_EXTRACTION_ENGINE === 'mistral_ocr'}
-							<div class="my-0.5 flex gap-2 pr-2">
+							<div class="flex flex-col w-full mt-1">
+								<div class="text-xs font-medium min-w-fit mb-1">
+									{$i18n.t('Endpoint URL')}
+								</div>
+								<input
+									class="flex-1 w-full text-sm bg-transparent outline-hidden"
+									placeholder={$i18n.t(
+										'Enter Mistral OCR Endpoint (default: https://api.mistral.ai/v1)'
+									)}
+									bind:value={RAGConfig.MISTRAL_OCR_ENDPOINT}
+								/>
+							</div>
+							<div class="flex flex-col w-full mt-2">
+								<div class="text-xs font-medium min-w-fit mb-1">
+									{$i18n.t('API Key')}
+								</div>
 								<SensitiveInput
 									placeholder={$i18n.t('Enter Mistral API Key')}
 									bind:value={RAGConfig.MISTRAL_OCR_API_KEY}
 								/>
+							</div>
+							<div class="flex flex-col w-full mt-2">
+								<div class="text-xs font-medium min-w-fit mb-1">
+									{$i18n.t('Model')}
+								</div>
+								<input
+									class="flex-1 w-full text-sm bg-transparent outline-hidden"
+									placeholder={$i18n.t('Enter Mistral OCR Model (default: mistral-ocr-latest)')}
+									bind:value={RAGConfig.MISTRAL_OCR_MODEL}
+								/>
+							</div>
+							<div class="flex w-full mt-2">
+								<div class="flex-1 flex justify-between">
+									<div class="text-xs font-medium">
+										<Tooltip
+											content={$i18n.t(
+												'Use Base64 encoding for Azure AI or LiteLLM Proxy endpoints (required). For Mistral API, file upload is faster but Base64 also works.'
+											)}
+											placement="top-start"
+										>
+											{$i18n.t('Use Base64 Encoding')}
+										</Tooltip>
+									</div>
+									<div class="flex items-center relative">
+										<Switch bind:state={RAGConfig.MISTRAL_OCR_USE_BASE64} />
+									</div>
+								</div>
+							</div>
+							<div class="mt-1 text-xs text-gray-400 dark:text-gray-500">
+								{#if RAGConfig.MISTRAL_OCR_USE_BASE64}
+									{$i18n.t(
+										'Base64 encoding: Required for Azure AI and LiteLLM Proxy. Works with all endpoints but may be slower for large files.'
+									)}
+								{:else}
+									{$i18n.t(
+										'File upload: Faster processing, but only works with Mistral API (not Azure AI or LiteLLM Proxy).'
+									)}
+								{/if}
 							</div>
 						{:else if RAGConfig.CONTENT_EXTRACTION_ENGINE === 'mineru'}
 							<!-- API Mode Selection -->

@@ -390,7 +390,14 @@ class Loader:
             in ["pdf"]  # Mistral OCR currently only supports PDF and images
         ):
             loader = MistralLoader(
-                api_key=self.kwargs.get("MISTRAL_OCR_API_KEY"), file_path=file_path
+                api_key=self.kwargs.get("MISTRAL_OCR_API_KEY"),
+                file_path=file_path,
+                base_url=self.kwargs.get(
+                    "MISTRAL_OCR_ENDPOINT", "https://api.mistral.ai/v1"
+                ),
+                model=self.kwargs.get("MISTRAL_OCR_MODEL", "mistral-ocr-latest"),
+                use_base64=self.kwargs.get("MISTRAL_OCR_USE_BASE64", True),
+                enable_debug_logging=False,
             )
         else:
             if file_ext == "pdf":

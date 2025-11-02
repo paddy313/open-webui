@@ -2470,6 +2470,24 @@ MISTRAL_OCR_API_KEY = PersistentConfig(
     os.getenv("MISTRAL_OCR_API_KEY", ""),
 )
 
+MISTRAL_OCR_ENDPOINT = PersistentConfig(
+    "MISTRAL_OCR_ENDPOINT",
+    "rag.mistral_ocr_endpoint",
+    os.getenv("MISTRAL_OCR_ENDPOINT", "https://api.mistral.ai/v1"),
+)
+
+MISTRAL_OCR_MODEL = PersistentConfig(
+    "MISTRAL_OCR_MODEL",
+    "rag.mistral_ocr_model",
+    os.getenv("MISTRAL_OCR_MODEL", "mistral-ocr-latest"),
+)
+
+MISTRAL_OCR_USE_BASE64 = PersistentConfig(
+    "MISTRAL_OCR_USE_BASE64",
+    "rag.mistral_ocr_use_base64",
+    os.getenv("MISTRAL_OCR_USE_BASE64", "True").lower() == "true",
+)
+
 BYPASS_EMBEDDING_AND_RETRIEVAL = PersistentConfig(
     "BYPASS_EMBEDDING_AND_RETRIEVAL",
     "rag.bypass_embedding_and_retrieval",
